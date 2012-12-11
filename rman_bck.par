@@ -1,0 +1,73 @@
+#######################################################################################################
+#                                                                                                     #
+#  Author: D'Hooge Freek                                                                              #
+#  Date:   17/11/2009                                                                                 #
+#  Description: This parameter file is used by the rman_bck.sh script and holds the list of backup    #
+#               options to be used with a particular NB schedule.                                     #
+#               The schedule name is used as a lookup key.                                            #
+#                                                                                                     #
+#               The different options are separated by ";"                                            #
+#               A schedule name can only appear once                                                  #
+#                                                                                                     #
+#               SCHEDULE_NAME          Name of the triggering NB schedule, passed to the script by    #
+#                                      Netbackup                                                      #
+#                                                                                                     #
+#               INSTANCE_NAME          Instance name on this server of the database that has to be    #
+#                                      backed up                                                      #
+#                                                                                                     #
+#               TARGET                 The connection string that has to be used to connect to the    #
+#                                      database to be backed up.                                      #
+#                                      Use "/" to connect as sys via os credentials                   #
+#                                                                                                     #
+#               CATALOG                The connection string that has to be used to connect to the    #
+#                                      recovery catalog                                               #
+#                                      Use nocatalog when there is no rman catalog database           #
+#                                                                                                     #
+#               BACKUP_MODE            Mode of the backup.                                            #
+#                                      Possible values:                                               #
+#                                        HOT  --> online backup                                       #
+#                                        COLD --> offline backup (database will put into mount mode   #
+#                                                 before the backup)                                  #
+#                                        ARCH --> backup of the archivelogs only                      #
+#                                        DISK_HOT --> online backup to disk                           #
+#                                        DISK_2_TAPE --> backup the backupset from disk to tape       #
+#                                        EXTERNAL:<script> --> specifies the external script that     #
+#                                                              will construct the rman backup command # 
+#                                                              This script will be sourced into the   #
+#                                                              main script and thus has full access   #
+#                                                              to all the variables.                  #
+#                                                                                                     #
+#                                                                                                     #
+#               BACKUP_TYPE            Type of the backup                                             #
+#                                      Possible values:                                               #
+#                                        FULL  --> full backup (can't be used for later incremental   #
+#                                                  backups, use incr level 0 instead)                 #
+#                                        INC   --> Incremental differential backup                    #
+#                                        CUM   --> Incremental cumulative backup                      #
+#                                                                                                     #
+#               LEVEL                  Level of the incremental backup, only used with incremental    #
+#                                      backups. Use 0 for a full backup (that can be used for later   #
+#                                      incremental backups)                                           #
+#                                                                                                     #
+#               PARALLELISM            Determines how many channels are used for the backup           #
+#                                                                                                     #
+#               APPLICATION_SCHEDULE   Name of the application schedule in NB                         #
+#                                      (used to set the retention time for the backup pieces)         #
+#                                                                                                     #
+#               DISK_DESTINATION       Directory on the server in which the backup pieces will        #
+#                                      be stored.                                                     #
+#                                      This parameter is only valid in case of disk backups           #
+#                                                                                                     #
+#               TAG                    Specifies the backup tag which must be used for this backup    #
+#                                      When not specified a default tag will be generated, based upon #
+#                                      the other parameters (backup_mode, backup_type and level) used #
+#                                                                                                     #
+#                                                                                                     #
+#######################################################################################################
+
+#SCHEDULE_NAME       ; INSTANCE_NAME   ; TARGET                 ; CATALOG                        ; BACKUP_MODE                  ; BACKUP_TYPE    ; LEVEL   ; PARALLELISM  ; APPLICATION_SCHEDULE ; DISK_DESTINATION ; TAG
+#-------------       ; -------------   ; ------                 ; -------                        ; -----------                  ; -----------    ; -----   ; -----------  ; -------------------- ; ---------------- ; ------
+SPEXP_DAILY          ; spexp           ; /                      ; rman11gR2/password@rmancatalog ; HOT                          ; FULL           ;         ; 1            ; SPEXP_DAILY_AS       ;                  ;
+PRD_DPNAVIS_BASELINE ; dpnavis         ; sys/password@dpnavis2  ; nocatalog                      ; DISK_HOT                     ; FULL           ;         ; 1            ;                      ; /ora_backup      ; BL_20120427
+QDOC_WEEKLY          ; qdoc            ; /                      ; rman11gR2/password@rmancatalog ; EXTERNAL:/backup/qdoc_backup ; INC            ; 0       ; 1            ; QDOC_WEEKLY_AS       ;                  ; HOT_INC_L0_CUM
+GUNNAR_DAILY         ; gunnar          ; /                      ; nocatalog                      ; DISK_HOT                     ; FULL           ;         ; 1            ;                      ; /btrfstest       ; TESTBCK

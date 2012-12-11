@@ -1,0 +1,31 @@
+[Config]
+Relative path=1
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+FileFormat=0
+[Project tree]
+backup
+	+backup
+		nb_start_rman.sh
+		rman_bck.par
+		rman_bck.sh
+[Open project files]
+0=nb_start_rman.sh
+1=rman_bck.sh
+2=rman_bck.par
+[Selected Project Files]
+Main=
+Selected=rman_bck.sh
+[nb_start_rman.sh]
+TopLine=1
+Caret=1,1
+[rman_bck.sh]
+TopLine=33
+Caret=5,65
+[rman_bck.par]
+TopLine=14
+Caret=53,33

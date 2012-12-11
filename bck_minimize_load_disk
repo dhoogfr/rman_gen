@@ -1,0 +1,61 @@
+### This script will be sourced into the rman_bck.sh script and is responsible for creating the rman backup command string
+###
+### Created to allow backups with the "backup duration ... minimize load" clause
+
+debugmsg 1 "Start of external script ${EXTERNAL_SCRIPT}"
+CMD_STR="
+  ORACLE_HOME=$ORACLE_HOME ; export ORACLE_HOME
+  ORACLE_SID=$ORACLE_SID ; export ORACLE_SID
+  LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH ; export LD_LIBRARY_PATH
+  NLS_DATE_FORMAT='DD/MM/YYYY HH24:MI:SS' ; export NLS_DATE_FORMAT
+  $RMAN msglog $RMAN_LOG_FILE append << EOF
+    $TARGET_CONNECT_STR
+    $CATALOG_CONNECT_STR
+    ### Enable the controlfile autobackup
+    ### This is not realy necessary when using an rman database catalog
+
+    configure controlfile autobackup format for device type DISK to '$DISK_DESTINATION/%F';
+    configure controlfile autobackup on;
+
+    ### Set the channel configuration
+    configure device type disk parallelism $PARALLELISM;
+    configure default device type to disk;
+    configure channel device type disk format '$DISK_DESTINATION/%U';
+
+    ### Output the configuration
+    show all;
+
+    ### Do not perform any crosschecking, this will be done by a separate maintenance job
+
+    ### Backup the database plus archivelogs
+    ### Remove the archivelogs after the backup
+    run
+    { backup
+        $BACKUP_OPTIONS
+        tag $BACKUP_TAG
+        archivelog all delete all input;
+    
+       backup
+        $BACKUP_OPTIONS
+        tag $BACKUP_TAG
+        duration 6:00
+        minimize load
+        database;
+       
+       sql \"alter system archive log current\";
+       
+       backup
+        $BACKUP_OPTIONS
+        tag $BACKUP_TAG
+        archivelog all delete all input;        
+    }
+
+    ### Clear the channel configuration
+    configure device type disk clear;
+    configure default device type clear;
+    configure channel device type disk clear;
+
+EOF
+"
+debugmsg 2 "  CMD_STR: $CMD_STR"
+debugmsg 1 "End of external script ${EXTERNAL_SCRIPT}"
