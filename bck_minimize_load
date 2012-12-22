@@ -13,7 +13,7 @@ CMD_STR="
     $CATALOG_CONNECT_STR
 
     set echo on
-    
+
     ### Enable the controlfile autobackup
     ### This is not realy necessary as we are using an rman database catalog
 
@@ -44,16 +44,18 @@ CMD_STR="
         tag $BACKUP_TAG
         archivelog all delete all input;
     
-       backup
+      backup
         $BACKUP_OPTIONS
         tag $BACKUP_TAG
         duration 6:00
         minimize load
-        database;
+        database
+          include current controlfile
+      ;
        
-       sql \"alter system archive log current\";
+      sql \"alter system archive log current\";
        
-       backup
+      backup
         $BACKUP_OPTIONS
         tag $BACKUP_TAG
         archivelog all delete all input;

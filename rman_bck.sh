@@ -280,7 +280,10 @@ bckDISK_HOT ()
       { backup
           $BACKUP_OPTIONS
           tag $BACKUP_TAG
-          database plus archivelog delete all input;
+          database 
+            include current controlfile
+            plus archivelog delete all input
+        ;
       }
 
       ### Clear the channel configuration
@@ -382,7 +385,10 @@ bckHOT ()
       { backup
           $BACKUP_OPTIONS
           tag $BACKUP_TAG
-          database plus archivelog delete all input;
+          database 
+            include current controlfile
+            plus archivelog delete all input
+        ;
       }
 
       ### Clear the channel configuration
@@ -441,7 +447,9 @@ bckCOLD ()
       { backup
           $BACKUP_OPTIONS
           tag $BACKUP_TAG
-          database;
+          database
+            include current controlfile
+        ;
       }
 
       ### Open the database again
