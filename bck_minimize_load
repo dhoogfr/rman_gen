@@ -11,6 +11,9 @@ CMD_STR="
   $RMAN msglog $RMAN_LOG_FILE append << EOF
     $TARGET_CONNECT_STR
     $CATALOG_CONNECT_STR
+
+    set echo on
+    
     ### Enable the controlfile autobackup
     ### This is not realy necessary as we are using an rman database catalog
 

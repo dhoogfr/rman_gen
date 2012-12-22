@@ -257,6 +257,7 @@ bckDISK_HOT ()
     $RMAN msglog $RMAN_LOG_FILE append << EOF
       $TARGET_CONNECT_STR
       $CATALOG_CONNECT_STR
+      set echo on
       ### Enable the controlfile autobackup
       ### This is not realy necessary when using an rman database catalog
 
@@ -304,6 +305,7 @@ bckDISK2TAPE ()
     $RMAN msglog $RMAN_LOG_FILE append << EOF
       $TARGET_CONNECT_STR
       $CATALOG_CONNECT_STR
+      set echo on
       ### Enable the controlfile autobackup
 
       configure controlfile autobackup format for device type 'SBT_TAPE' to '%F';
@@ -351,6 +353,7 @@ bckHOT ()
     $RMAN msglog $RMAN_LOG_FILE append << EOF
       $TARGET_CONNECT_STR
       $CATALOG_CONNECT_STR
+      set echo on
       ### Enable the controlfile autobackup
       ### This is not realy necessary as we are using an rman database catalog
 
@@ -405,6 +408,8 @@ bckCOLD ()
     $RMAN msglog $RMAN_LOG_FILE append << EOF
       $TARGET_CONNECT_STR
       $CATALOG_CONNECT_STR
+
+      set echo on
 
       ### Enable the controlfile autobackup
       ### This is not realy necessary as we are using an rman database catalog
@@ -465,6 +470,9 @@ bckARCH ()
     $RMAN msglog $RMAN_LOG_FILE append << EOF
       $TARGET_CONNECT_STR
       $CATALOG_CONNECT_STR
+
+      set echo on
+
       ### Set the channel configuration
       configure device type sbt parallelism $PARALLELISM;
       configure default device type to sbt;
