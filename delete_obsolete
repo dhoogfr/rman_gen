@@ -1,0 +1,45 @@
+### This script will be sourced into the rman_bck.sh script and is responsible for creating the rman backup command string
+###
+### Created to delete obsolete backups from disk
+
+debugmsg 1 "Start of external script ${EXTERNAL_SCRIPT}"
+CMD_STR="
+  ORACLE_HOME=$ORACLE_HOME ; export ORACLE_HOME
+  ORACLE_SID=$ORACLE_SID ; export ORACLE_SID
+  LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH ; export LD_LIBRARY_PATH
+  NLS_DATE_FORMAT='DD/MM/YYYY HH24:MI:SS' ; export NLS_DATE_FORMAT
+  $RMAN msglog $RMAN_LOG_FILE append << EOF
+    $TARGET_CONNECT_STR
+    $CATALOG_CONNECT_STR
+
+    set echo on
+
+    ### Enable the controlfile autobackup
+    ### This is not realy necessary when using an rman database catalog
+
+    configure controlfile autobackup format for device type DISK to '$DISK_DESTINATION/%F';
+    configure controlfile autobackup on;
+
+    ### Set the channel configuration
+    configure device type disk parallelism $PARALLELISM;
+    configure default device type to disk;
+    configure channel device type disk format '$DISK_DESTINATION/%U';
+
+    ### Output the configuration
+    show all;
+
+    ### Verify the backups on disk
+    crosscheck backup;
+    list expired backup;
+    delete noprompt expired backup;
+
+    ### report the obsolete backups using recovery window / redundancy parameters set in the controlfile
+   report obsolete;
+
+    ### delete the obsolete backups from disk
+    delete force noprompt obsolete;
+
+EOF
+"
+debugmsg 2 "  CMD_STR: $CMD_STR"
+debugmsg 1 "End of external script ${EXTERNAL_SCRIPT}"
