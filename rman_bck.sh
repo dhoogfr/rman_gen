@@ -160,7 +160,7 @@ setBackupOptions ()
   then
     ### When using an external script the creation of the default tag and backup_options string is the responsibility of that external script,
     ### as there is no way for us to know which variables will be used and which not
-    debugmsg " Skipping construction of default tag and BACKUP_OPTIONS string due to external script";
+    debugmsg 1 " Skipping construction of default tag and BACKUP_OPTIONS string due to external script";
   else
     if [ "$BACKUP_MODE" = "ARCH" ]
     then
