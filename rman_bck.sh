@@ -54,6 +54,9 @@
 #  Date: 03/06/2012                                                                                   #
 #  Description: added the possibility to control the from address when emailing the logfile           #
 #                                                                                                     #
+#  Last modified by: Freek D'Hooge                                                                    #
+#  Date: 08/05/2013                                                                                   #
+#  Description: new changes will only be logged in the changelog anymore and not in this file itself  #
 #                                                                                                     #
 #######################################################################################################
 
@@ -237,6 +240,8 @@ initLogfile ()
   elif [ "$BACKUP_TYPE" = "INC" ]
   then
     RMAN_LOG_FILE=${LOGDIR}/rman_${ORACLE_SID}_${LOGDATE}_${BACKUP_MODE}_${BACKUP_TYPE}L${LEVEL}.log
+  else
+    RMAN_LOG_FILE=${LOGDIR}/rman_${ORACLE_SID}_${LOGDATE}.log
   fi
 
   debugmsg 2 "  RMAN_LOG_FILE: $RMAN_LOG_FILE"
