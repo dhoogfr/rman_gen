@@ -4,6 +4,9 @@ rman_gen
 Generate and execute an Oracle rman script based upon the schedule name passed via netbackup (or manually set in the environment) and values found in a parameter file.
 See the example parameter file for which options are possible.
 
+Site dependent variables (path variables, email settings, ...) are split from the rman_bck.sh script and put into the global_var.par file.
+Modify these to fit your environment
+
 When using netbackup, set the backup_selection to the rman_bck.sh script.
 When running the script directly use the rman_bck_to_disk.sh script and pass the lookup "schedule name" as parameter.
 
