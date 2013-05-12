@@ -1,0 +1,27 @@
+### variables that are site dependend, sourced into the main script
+
+PATH=/usr/local/bin:$PATH ; export PATH
+GREP=/bin/grep
+SH=/bin/sh
+SENDMAIL=/usr/sbin/sendmail
+
+# name and location of the parameter file containing the backup options
+PARFILE=/opt/oracle/backup/scripts/rman_bck.par
+
+# logfile location, name will be generated using a timestamp
+LOGDIR=/opt/oracle/backup/logs/
+
+# when the script is started as root, switch to this user to execute the rman command (if not, the rman command will run as the user started this script)
+ORACLE_USER=grid
+
+#location of the oraenv script
+ORAENV=/usr/local/bin/oraenv
+
+### set to Y if the logfile has to be mailed
+SENDLOGGING=Y
+
+### if SENDLOGGING = Y, defines to where the rman logfile has to be mailed
+MAILTO='freek.dhooge@uptime.be'
+
+### if SENDLOGGING = Y, defines the sender of the email
+MAILFROM=oracle@mijntest.be

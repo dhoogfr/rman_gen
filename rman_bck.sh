@@ -62,24 +62,20 @@
 
 DEBUG=0
 DEBUGFILE=/tmp/rman_bck_`date '+%Y%m%d%H%M%S'`.debug
-
+script_dir=`dirname $0`
 
 ### Set the configuration variables
 init ()
 { debugmsg 1 "Start of routine init"
-  PATH=/usr/local/bin:$PATH ; export PATH
-  PARFILE=/opt/oracle/backup/scripts/rman_bck.par
-  LOGDIR=/opt/oracle/backup/logs/
-  ORACLE_USER=grid
-  GREP=/bin/grep
-  ORAENV=/usr/local/bin/oraenv
-  SH=/bin/sh
-  SENDMAIL=/usr/sbin/sendmail
-  ### set to Y if the logfile has to be mailed
-  SENDLOGGING=Y
-  ### if SENDLOGGING = Y, defines to where the rman logfile has to be mailed
-  MAILTO='freek.dhooge@uptime.be'
-  MAILFROM=oracle@mijntest.be
+
+  debugmsg 2 "sourcing in the site dependend global variables"
+  if [ -r ${script_dir}/global_var.par ]
+  then
+    source ${script_dir}/global_var.par
+  else
+    echo "global_var.par file is not existing or not readable"
+    exit 1
+  fi
 
   debugmsg 2 "PATH         : $PATH"
   debugmsg 2 "PARFILE      : $PARFILE"
